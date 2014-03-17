@@ -6,6 +6,6 @@ This repository contains the code for Exercise 3 of Computational Physics 301, o
 The contents of the code is split in two:
 
 * Generating random numbers following a particular distribution using:
-	* an analytic inversion method
+	* an analytic inversion method, and
 	* a _reject-accept_ method (conceptually similar to standard Monte Carlo techniques).
 * Simulating the distribution of gamma rays, produced by the decay of a beam of unstable nuclei, detected in a nuclear physics experiment.
