@@ -1,17 +1,25 @@
-## My progress bar - maybe I'll need it later
+## Trying a numpy method, but I'll keep this in case the numpy one doesn't work out
 
-even = np.zeros((num))
+def reject_accept(num):
+    # Use reject-accept method to produce random numbers distributed as 
+    # sin(theta) in 0 < theta < pi
 
-print "Random numbers produced: ",
+    first = []
+    second = []
+    sinusoid = []
 
-for i in range(num):
+    print "Random numbers produced: ",
 
-    even[i] = rnd.uniform(0,2)
+    for i in range(num):
+        first.append(rnd.uniform(0,math.pi))
+        second.append(rnd.uniform(0,1))
 
-    percentage = 100*(i+1)/num
+        if second[i] < math.sin(first[i]):
+            sinusoid.append(first[i])
 
-    if percentage%1 == 0:
-        sys.stdout.flush()
-        sys.stdout.write("\r\t\t\t\t\t["+"#"*int(percentage)+" "*int(100 - percentage)+"]"+"(%3d%%)"%(percentage))
+        display_progress(i+1,num)
 
-print
+    print
+    print "Sinusoidal random number distribution using reject-accept method produced."
+
+    return sinusoid

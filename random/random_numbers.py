@@ -25,15 +25,20 @@ print
 
 start = time.clock()
 
-sinusoid = rndlib.trans_to_sin(even)
+analytic_sin = rndlib.trans_to_sin(even)
 
 end = time.clock()
 
-print
 print "Time taken: ", end - start
 print
 
-rndplt.plot_sin_hist(sinusoid)
-
 # Reject-accept method
 
+start = time.clock()
+reject_accept_sin = rndlib.reject_accept(num_numbers)
+end = time.clock()
+print "Time taken: ", end - start
+print
+
+rndplt.plot_sin_hist(reject_accept_sin, title="Reject-Accept Method", fname="reject_accept")
+rndplt.plot_sin_hist(analytic_sin, title="Analytic Method", fname="analytic")

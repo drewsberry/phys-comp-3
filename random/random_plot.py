@@ -7,7 +7,7 @@ import numpy as np
 
 matplotlib.rc("text", usetex=True)
 
-def plot_sin_hist(dist):
+def plot_sin_hist(dist, title=None, fname=None):
     # Plot dist as histogram, with sin curve plotted over the top
 
     num_bins = 100
@@ -25,10 +25,15 @@ def plot_sin_hist(dist):
 
     plt.xlabel("Random angle, $\\theta$")
     plt.ylabel("Frequency")
-    plt.title("Analytic Method")
+    plt.title(title)
 
     plt.legend(loc="upper right", fontsize="x-small", borderpad=1)
 
-    now = datetime.now()
-    fname = "plots/"+"random_sinusoid_"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)+".eps"
+    if fname == None:
+        now = datetime.now()
+        fname = "plots/"+"random_sinusoid_"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)+".eps"
+    else:
+        fname = "plots/"+fname+".eps"
+
     plt.savefig(fname)
+    print "Saved plot as {}".format(fname)
