@@ -14,6 +14,12 @@ import random_plot as rndplt
 
 parser = argparse.ArgumentParser(description="Producing random numbers distributed as sin(theta)")
 
+parser.add_argument("func", help="The function to distribute randomly around. All mathematical functions "\
+                                 "supported by NumPy are valid.")
+
+parser.add_argument("-r", "--range", type=float, default=(0,1),
+                    help="The range to produce random numbers from and to.")
+
 parser.add_argument("-v", "--verbose", action="store_true",
                     help="Increase verbosity; print information including progress bars - slows"\
                          " down program.")
@@ -49,20 +55,11 @@ if args.timed:
     print "Processor time taken: ", end - start
 print
 
-# Analytic method
-
-start = time.clock()
-analytic_sin = rndlib.trans_to_sin(even)
-end = time.clock()
-if args.timed:
-    print "Processor time taken: ", end - start
-print
-
 # Reject-accept method
 
 if not args.fixnum:
     start = time.clock()
-    reject_accept_sin = rndlib.reject_accept(num, args.verbose)
+    reject_accept_sin = rndlib.reject_accept(num, args.verbose, args.func, args.range)
     end = time.clock()
     if args.timed:
         print "Processor time taken: ", end - start
@@ -72,12 +69,14 @@ if not args.fixnum:
 
 if args.fixnum:
     start = time.clock()
-    reject_accept_sin = rndlib.reject_accept_fixed(num, args.verbose)
+    reject_accept_sin = rndlib.reject_accept_fixed(num, args.verbose, args.func, args.range)
     end = time.clock()
     if args.timed:
         print "Processor time taken: ", end - start
     print
 
 if args.plot:
-    rndplt.plot_sin_hist(analytic_sin, title="Analytic Method", fname="analytic")
-    rndplt.plot_sin_hist(reject_accept_sin, title="Reject-Accept Method", fname="reject_accept")
+    rndplt.plot_gen_hist(analytic_sin, title="General Distribution, Analytic Method", 
+                         fname="analytic", func_str=args.func, plot_range=args.range)
+    rndplt.plot_gen_hist(reject_accept_sin, title="General Distribution, Reject-Accept Method", 
+                         fname="reject_accept", func_str=args.func, plot_range=args.range)
