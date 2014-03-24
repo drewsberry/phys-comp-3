@@ -9,10 +9,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Custom libraries
-import random_lib as rndlib
-import random_plot as rndplt
+import distributor_lib as dstlib 
+import distributor_plot as dstplt 
+import str_to_func_lib as stfl
 
 parser = argparse.ArgumentParser(description="Producing random numbers distributed as sin(theta)")
+
+parser.add_argument("func", help="The function to distribute randomly around. All mathematical functions "\
+                                 "supported by NumPy are valid. Enter as string, e.g. 'sin(x)'.")
+
+parser.add_argument("-r", "--range", help="The range to produce random numbers from and to. Enter as string"\
+                                          " tuple, e.g. '(0,pi)'")
 
 parser.add_argument("-v", "--verbose", action="store_true",
                     help="Increase verbosity; print information including progress bars - slows"\
@@ -41,28 +48,15 @@ parser.add_argument("-t", "--timed", action="store_true",
 args = parser.parse_args()
 
 num = int(args.num) # This means scientific notation can be accepted as argument
+dist_range = dstlib.string_to_list(args.range)
 
-start = time.clock()
-even = rndlib.produce_randoms(num)
-end = time.clock()
-if args.timed:
-    print "Processor time taken: ", end - start
-print
-
-# Analytic method
-
-start = time.clock()
-analytic_sin = rndlib.trans_to_sin(even)
-end = time.clock()
-if args.timed:
-    print "Processor time taken: ", end - start
-print
+# dist_range = (0,1)
 
 # Reject-accept method
 
 if not args.fixnum:
     start = time.clock()
-    reject_accept_sin = rndlib.reject_accept_sin(num, args.verbose)
+    reject_accept_dist = dstlib.reject_accept(num, args.verbose, args.func, dist_range)
     end = time.clock()
     if args.timed:
         print "Processor time taken: ", end - start
@@ -72,12 +66,14 @@ if not args.fixnum:
 
 if args.fixnum:
     start = time.clock()
-    reject_accept_sin = rndlib.reject_accept_sin_fixed(num, args.verbose)
+    reject_accept_dist = dstlib.reject_accept_fixed(num, args.verbose, args.func, dist_range)
     end = time.clock()
     if args.timed:
         print "Processor time taken: ", end - start
     print
 
 if args.plot:
-    rndplt.plot_sin_hist(analytic_sin, title="Analytic Method", fname="analytic")
-    rndplt.plot_sin_hist(reject_accept_sin, title="Reject-Accept Method", fname="reject_accept")
+    #  dstplt.plot_gen_hist(analytic_sin, title="General Distribution, Analytic Method", 
+    #                      fname="analytic", func_str=args.func, plot_range=dist_range)
+     dstplt.plot_gen_hist(reject_accept_dist, title=args.func+" Distribution, Reject-Accept Method", 
+                         fname="reject_accept", func_str=args.func, plot_range=dist_range)

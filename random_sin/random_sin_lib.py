@@ -1,3 +1,18 @@
+# In-built libraries
+import math
+
+#External libraries
+import numpy as np
+
+def produce_randoms(num):
+    # Produce num evenly distributed random numbers 
+
+    print "Producing {} uniformly distributed random numbers... ".format(num),
+    even = np.random.uniform(0,2,num)
+    print "done"
+
+    return even
+
 def trans_to_sin(even):
     # Translate evenly distributed random numbers to those distributed as 
     # sin(theta) in 0 < theta < pi
