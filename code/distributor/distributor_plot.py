@@ -1,3 +1,5 @@
+from __future__ import division
+
 import math
 
 # In-built libraries
@@ -10,28 +12,35 @@ import numpy as np
 
 # Custom libraries
 import str_to_func_lib as stfl
+import distributor_lib as dstlib
 
 matplotlib.rc("text", usetex=True)
 
-def plot_gen_hist(dist, title=None, fname=None, func_str=None, plot_range=(0,1)):
+def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
     # Plot dist as histogram, with func curve plotted over top
 
     num_bins = 100
-    bin_width = math.pi / num_bins
+    dx = 0.0001
+    bin_width = (plot_range[1] - plot_range[0]) / num_bins
     num = len(dist)
 
-    if func_str:
-        func = stfl.string_to_function(func_str)
+    func = stfl.string_to_function(func_str)
 
     fig, ax = plt.subplots()
 
-    n, bins, patches = ax.hist(dist, num_bins, color="green", linewidth=0.5, label="Random number distribution")
+    n, bins, patches = ax.hist(dist, num_bins, color="green", linewidth=0.5, 
+                               label="Random {} distribution".format(func_str))
 
-    if func_str:
-        x = np.arange(plot_range[0], plot_range[1], 0.01)
-        plt.plot(x, 0.5*num*bin_width*func(x), linewidth=5, label=func_str)
+    x = np.arange(plot_range[0], plot_range[1], dx)
 
-    # plt.xlim([plot_range[0],plot_range[1]])
+    func_area = np.trapz(func(x), dx=dx)
+    # Use composite trapezoidal rule to integrate function within range
+
+    norm = num*bin_width/func_area
+    # Normalisation factor so curve and histogram are level
+
+    plt.plot(x, norm*func(x), linewidth=5, label=func_str)
+
     plt.xlim(plot_range)
 
     plt.xlabel("Random number, $x$")
@@ -40,11 +49,11 @@ def plot_gen_hist(dist, title=None, fname=None, func_str=None, plot_range=(0,1))
 
     plt.legend(loc="upper right", fontsize="x-small", borderpad=1)
 
-    if fname == None:
+    if fname:
+        fname = "plots/"+fname+".eps"
+    else:
         now = datetime.now()
         fname = "plots/"+"random_sinusoid_"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)+".eps"
-    else:
-        fname = "plots/"+fname+".eps"
 
     plt.savefig(fname)
     print "Saved plot as {}".format(fname)

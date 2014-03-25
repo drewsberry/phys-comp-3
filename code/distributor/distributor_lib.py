@@ -32,8 +32,6 @@ def display_progress(current, target):
 def string_to_list(string):
     # Turn string into list so range can be parsed by arguments neatly and intuitively
 
-    # tuple = tuple(int(x) for x in re.findall("[0-9]+", string))
-
     lst = string.lstrip("(").rstrip(")").split(",")
     # Remove bracket "(", ")" and comma "," and split elements into list
 
@@ -48,18 +46,25 @@ def reject_accept(num, verb, func_str, dist_range):
 
     func = stfl.string_to_function(func_str)
 
-    print "<reject_accept> func_str: ", func_str
-    print "<reject_accept> func: ", func
+    func_max = find_max(func, dist_range)
 
-    print "<reject_accept> func(0):", func(2)
+    print
+    debug_var(__name__, "func_str", func_str)
+    debug_var(__name__, "func", func)
+    debug_var(__name__, "func(dist_range[0])", func(dist_range[0]))
+    debug_var(__name__, "func(dist_range[1])", func(dist_range[1]))
+    debug_var(__name__, "dist_range", dist_range)
 
-    print "<reject_accept> dist_range, type(dist_range): ", dist_range, type(dist_range)
-
-    first = np.random.uniform(dist_range[0],dist_range[1],num)
-    second = np.random.uniform(0,func(dist_range[1]),num)
+    first = np.random.uniform(dist_range[0], dist_range[1], num)
+    second = np.random.uniform(0, func_max, num)
     dist = []
 
     criterion = second < func(first)
+
+    debug_var(__name__, "first", first)
+    debug_var(__name__, "second", second)
+    debug_var(__name__, "criterion", criterion)
+    print
 
     print "Producing random user-distributed numbers using reject-accept method...",
 
@@ -114,3 +119,19 @@ def reject_accept_fixed(num, verb, func_str, dist_range):
             display_progress(len(dist),num)
 
     return False
+
+def find_max(function, fc_range):
+    # Find maximum value of function in dist_range
+
+    delta_x = 0.1
+
+    dist = function(np.arange(fc_range[0], fc_range[1], delta_x))
+
+    return np.max(dist)
+
+def debug_var(name, variable_str, variable):
+    # Print debug information about variable
+
+    print "<{}>:\t{}:\t{}".format(name, variable_str, variable)
+
+    return True

@@ -18,8 +18,9 @@ parser = argparse.ArgumentParser(description="Producing random numbers distribut
 parser.add_argument("func", help="The function to distribute randomly around. All mathematical functions "\
                                  "supported by NumPy are valid. Enter as string, e.g. 'sin(x)'.")
 
-parser.add_argument("-r", "--range", help="The range to produce random numbers from and to. Enter as string"\
-                                          " tuple, e.g. '(0,pi)'")
+parser.add_argument("-r", "--range", required=True,
+                    help="The range to produce random numbers from and to. Enter as string"\
+                         " tuple, e.g. '(0,pi)'")
 
 parser.add_argument("-v", "--verbose", action="store_true",
                     help="Increase verbosity; print information including progress bars - slows"\
