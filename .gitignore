@@ -7,3 +7,6 @@
 
 # Plot files
 *.eps
+
+# LibreOffice file locks
+*.~lock*
