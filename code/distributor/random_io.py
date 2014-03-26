@@ -82,3 +82,4 @@ def output_to_excel(data, fname, func_str):
     workbook.save(fname)
 
     return True
+    

@@ -2,19 +2,13 @@ from __future__ import division
 
 # In-built libraries
 import sys
-import random
-import math
-import re
-from math import pi,e
+from math import pi,e # So that pi or e can be used in range
 
 # External libraries
 import numpy as np
 
 # Custom libraries
 import str_to_func_lib as stfl
-
-# rnd = random.SystemRandom()
-## Use system produced random numbers
 
 def display_progress(current, target):
     # Displays progress bar showing how close current is to target
@@ -123,10 +117,3 @@ def find_max(function, fc_range):
     dist = function(np.arange(fc_range[0], fc_range[1], delta_x))
 
     return np.max(dist)
-
-def debug_var(name, variable_str, variable):
-    # Print debug information about variable
-
-    print "<{}>:\t{}:\t{}".format(name, variable_str, variable)
-
-    return True
