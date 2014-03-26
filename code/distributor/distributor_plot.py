@@ -12,7 +12,6 @@ import numpy as np
 
 # Custom libraries
 import str_to_func_lib as stfl
-import distributor_lib as dstlib
 
 matplotlib.rc("text", usetex=True)
 

@@ -48,23 +48,11 @@ def reject_accept(num, verb, func_str, dist_range):
 
     func_max = find_max(func, dist_range)
 
-    print
-    debug_var(__name__, "func_str", func_str)
-    debug_var(__name__, "func", func)
-    debug_var(__name__, "func(dist_range[0])", func(dist_range[0]))
-    debug_var(__name__, "func(dist_range[1])", func(dist_range[1]))
-    debug_var(__name__, "dist_range", dist_range)
-
     first = np.random.uniform(dist_range[0], dist_range[1], num)
     second = np.random.uniform(0, func_max, num)
     dist = []
 
     criterion = second < func(first)
-
-    debug_var(__name__, "first", first)
-    debug_var(__name__, "second", second)
-    debug_var(__name__, "criterion", criterion)
-    print
 
     print "Producing random user-distributed numbers using reject-accept method...",
 
@@ -78,6 +66,8 @@ def reject_accept(num, verb, func_str, dist_range):
         if verb:
             display_progress(i+1,num)
 
+    if verb:
+        print "...",
     print "done"
 
     if verb:
@@ -91,12 +81,14 @@ def reject_accept_fixed(num, verb, func_str, dist_range):
 
     func = stfl.string_to_function(func_str)
 
+    func_max = find_max(func, dist_range)
+
     # The 5 is just because chance if I produce 9 times the number I need then
     # chances are at that I'll get at least num out (specifically, 1*num produces
     # about 0.6*num out, so 9*num is insufficient in ~1% of all runs). There is a 
     # trade-off here in terms of efficiency and processing time.
-    first = np.random.uniform(dist_range[0],dist_range[1],9*num)
-    second = np.random.uniform(0,func(dist_range[1]),9*num)
+    first = np.random.uniform(dist_range[0], dist_range[1], 9*num)
+    second = np.random.uniform(0, func_max, 9*num)
     dist = []
 
     criterion = second < func(first)
@@ -112,12 +104,15 @@ def reject_accept_fixed(num, verb, func_str, dist_range):
         if criterion[i]:
             dist.append(first[i])
             if len(dist) >= num:
+                if verb:
+                    print "...",
                 print "done"
 
                 return dist 
         if verb:
             display_progress(len(dist),num)
 
+    print "Error generating random distribution using fixed reject-accept method."
     return False
 
 def find_max(function, fc_range):
