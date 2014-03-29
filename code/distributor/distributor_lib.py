@@ -112,7 +112,7 @@ def reject_accept_fixed(num, verb, func_str, dist_range):
 def find_max(function, fc_range):
     # Find maximum value of function in dist_range
 
-    delta_x = 0.1
+    delta_x = 0.0001
 
     dist = function(np.arange(fc_range[0], fc_range[1], delta_x))
 

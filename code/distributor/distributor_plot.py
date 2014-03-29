@@ -12,6 +12,7 @@ import numpy as np
 
 # Custom libraries
 import str_to_func_lib as stfl
+import distributor_lib as dstlib
 
 matplotlib.rc("text", usetex=True)
 
@@ -19,7 +20,7 @@ def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
     # Plot dist as histogram, with func curve plotted over top
 
     num_bins = 100
-    dx = 0.0001
+    dx = 0.00000001
     bin_width = (plot_range[1] - plot_range[0]) / num_bins
     num = len(dist)
 
@@ -34,6 +35,11 @@ def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
 
     func_area = np.trapz(func(x), dx=dx)
     # Use composite trapezoidal rule to integrate function within range
+
+    # bin_max = np.max(bins)
+    # func_max = dstlib.find_max(func, plot_range)
+
+    # bins *= func_max / bin_max
 
     norm = num*bin_width/func_area
     # Normalisation factor so curve and histogram are level
