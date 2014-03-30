@@ -1,14 +1,14 @@
 from __future__ import division
 
+# External plotting libraries
 import matplotlib.pyplot as plt
 from matplotlib import rc
 
 rc("text", usetex=True)
 
-def plot_times_and_distances(lifetimes, decay_positions):
+def plot_times_and_distances(lifetimes, decay_positions, num_bins=50,
+                             fname="gamma_decays"):
     # Plot decay times and distances
-
-    num_bins = 50
 
     fig = plt.figure()
 
@@ -26,14 +26,14 @@ def plot_times_and_distances(lifetimes, decay_positions):
 
     plt.tight_layout()
 
-    plt.savefig("plots/gamma_decays.eps", bbox_inches="tight")
+    fname = "plots/" + fname + ".eps"
+    plt.savefig(fname, bbox_inches="tight")
+    print "Plot saved as {}".format(fname)
 
     return True
 
-def plot_decay_angles(phi, theta):
+def plot_decay_angles(phi, theta, num_bins=200, fname="gamma_angles"):
     # Plot histogram of decay angles
-
-    num_bins = 200
 
     fig = plt.figure()
 
@@ -46,26 +46,32 @@ def plot_decay_angles(phi, theta):
     cbar.solids.set_edgecolor("face")
     plt.draw()
 
-    plt.savefig("plots/gamma_angles.eps", bbox_inches="tight")
+    fname = "plots/" + fname + ".eps"
+    plt.savefig(fname, bbox_inches="tight")
+    print "Plot saved as {}".format(fname)
 
     return True
 
-def plot_detector(x_pos, y_pos, detector_range):
+def plot_detector(x_pos, y_pos, detector_range, res_x, res_y, 
+                  title="$\gamma$ Ray Detector Readings", fname="gamma_detector"):
     # Plot detector readings
 
-    x_res = 0.1 # cm
-    y_res = 0.3 # cm
-
-    num_bins = (((detector_range[0][1] - detector_range[0][0]) / 0.1),
-                ((detector_range[1][1] - detector_range[1][0]) / 0.3))
+    num_bins = (((detector_range[0][1] - detector_range[0][0]) / res_x),
+                ((detector_range[1][1] - detector_range[1][0]) / res_y))
 
     fig = plt.figure()
 
     plt.hist2d(x_pos, y_pos, bins=num_bins, range=detector_range)
     plt.xlabel("$x$ position on detector, m")
     plt.ylabel("$y$ position on detector, m")
-    plt.title("$\gamma$ Ray Detector Readings")
+    plt.title(title)
 
-    plt.savefig("plots/gamma_detector.eps", bbox_inches="tight")
+    cbar = plt.colorbar()
+    cbar.solids.set_edgecolor("face")
+    plt.draw()
+
+    fname = "plots/" + fname + ".eps"
+    plt.savefig(fname, bbox_inches="tight")
+    print "Plot saved as {}".format(fname)
 
     return True
