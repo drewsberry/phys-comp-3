@@ -31,7 +31,7 @@ parser.add_argument("-n", "--num", type=float, default=1e6,
 parser.add_argument("-t", "--timed", action="store_true",
                     help="Time operations for performance comparison.")
 
-parser.add_argument("-e", "--excel",
+parser.add_argument("-x", "--excel",
                     help="Write resulting output random numbers to excel spreadsheet.")
 
 # Arguments go here, once I've finalised and decided what they are
@@ -89,7 +89,7 @@ if args.output:
 if args.excel:
     start = time.clock()
 
-    print "Writing random distribution data to excel spreadsheet..."
+    print "Writing random distribution data to Excel spreadsheet..."
     start = time.clock()
     anaio.output_to_excel(analytic_sin, args.excel)
     print "...done"

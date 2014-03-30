@@ -37,13 +37,13 @@ def output_to_file(data, fname):
 
     with open(fname, "w") as output_file:
         output_file.write("Random sinusoidally distributed numbers\n")
-        for i in range(len(data)):
-            output_file.write("%f\n" % data[i])
+        for value in data:
+            output_file.write("%f\n" % value)
 
     return True
 
 def output_to_excel(data, fname):
-    # Write resulting random data to excel spreadsheet fname.xlsx
+    # Write resulting random data to Excel spreadsheet fname.xlsx
 
     if not is_valid_fname(fname):
         print "[Error] Invalid filename:", fname
