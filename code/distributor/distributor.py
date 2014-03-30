@@ -4,15 +4,18 @@ from __future__ import division
 import time
 import argparse
 
-# External libraries
-import numpy as np
-import matplotlib.pyplot as plt
-
 # Custom libraries
 import distributor_lib as dstlib 
-import distributor_plot as dstplt 
-import str_to_func_lib as stfl
-import random_io as rndio
+import str_to_func_lib as stflib
+import distributor_io as dstio
+
+try:
+    import distributor_plot as dstplt 
+    can_plot = True
+except ImportError as e:
+    print "[Warning] Error importing plotting library; plotting functions ('-p'/'--plot') will be unavailable."
+    print "[Warning] Error message:", e, "\n"
+    can_plot = False
 
 parser = argparse.ArgumentParser(description="Producing random numbers distributed as per user"\
                                              " input function.")
@@ -38,25 +41,44 @@ parser.add_argument("-p", "--plot", action="store_true",
 parser.add_argument("-o", "--output",
                     help="Write resulting output random numbers to file.")
 
-parser.add_argument("-e", "--excel",
+parser.add_argument("-x", "--excel",
                     help="Write resulting output random numbers to excel spreadsheet.")
 
 parser.add_argument("-n", "--num", type=float, default=1e6,
-                    help="number of initial random numbers to produce. This will equal the number"\
-                         " of sinusoidally distributed random numbers for the analytic method, but"\
-                         " not for the reject-accept method unless the '-f'/'--fixnum' flags are"\
-                         " also used.")
+                    help="number of initial random numbers to produce. This will not equal the number"\
+                         " of user-distributed random numbers unless unless the '-f'/'--fixnum'"\
+                         " flags are used.")
 
 parser.add_argument("-f", "--fixnum", action="store_true",
-                    help="produce fixed number of random sinusoidally distributed numbers.")
+                    help="produce fixed number of random user-distributed numbers.")
 
 parser.add_argument("-t", "--timed", action="store_true",
                     help="time operations for performance comparison.")
 
 args = parser.parse_args()
 
+# If you want to plot but can't, print message and prevent from trying to plot
+if not can_plot and args.plot:
+    print "[Warning] Plotting disabled due to import error.\n"
+    args.plot = False
+
 num = int(args.num) # This means scientific notation (float) can be accepted in argument
-dist_range = dstlib.string_to_list(args.range)
+
+try:
+    dist_range = dstlib.string_to_list(args.range)
+except Exception as e:
+    print "[Error] Error converting input range into list."\
+          " Please check the sanity of your input."
+    print "[Error] Error message:", e
+    exit(10)
+
+try:
+    function = stflib.string_to_function(args.func)
+except Exception as e:
+    print "[Error] Error converting input function string into Python function."\
+          " Please check the sanity of your input."
+    print "[Error] Error message:", e
+    exit(20)
 
 # Reject-accept method
 
@@ -65,7 +87,7 @@ if not args.fixnum:
     random_dist = dstlib.reject_accept(num, args.verbose, args.func, dist_range)
     end = time.clock()
     if args.timed:
-        print "Processor time taken: {} s".format(end - start)
+        print "[ Processor time taken:", end - start, "s ]"
     print
 
 # Fixed reject-accept method
@@ -75,25 +97,26 @@ if args.fixnum:
     random_dist = dstlib.reject_accept_fixed(num, args.verbose, args.func, dist_range)
     end = time.clock()
     if args.timed:
-        print "Processor time taken: {} s".format(end - start)
+        print "[ Processor time taken:", end - start, "s ]"
     print
 
 if args.plot:
-     dstplt.plot_gen_hist(random_dist, title=args.func+" Distribution, Reject-Accept Method", 
-                         fname="reject_accept", func_str=args.func, plot_range=dist_range)
+     dstplt.plot_hist(random_dist, args.func, dist_range,
+                      title=args.func+" Distribution, Reject-Accept Method",
+                      fname="reject_accept")
 
 # Write output to file
 
 if args.output:
     start = time.clock()
 
-    print "Writing random distribution to file...",
-    rndio.output_to_file(random_dist, args.output, args.func)
-    print "done"
+    print "Writing random distribution to file..."
+    dstio.output_to_file(random_dist, args.output, args.func)
+    print "...done"
 
     end = time.clock()
     if args.timed:
-        print "Processor time taken: {} s".format(end - start)
+        print "[ Processor time taken:", end - start, "s ]"
     print
 
 # Write output to Excel spreadsheet
@@ -101,11 +124,11 @@ if args.output:
 if args.excel:
     start = time.clock()
 
-    print "Writing random distribution data to excel spreadsheet...",
+    print "Writing random distribution data to excel spreadsheet..."
     start = time.clock()
-    rndio.output_to_excel(random_dist, args.excel, args.func)
-    print "done"
+    dstio.output_to_excel(random_dist, args.excel, args.func)
+    print "...done"
 
     end = time.clock()
     if args.timed:
-        print "Processor time taken: {} s".format(end - start)
+        print "[ Processor time taken:", end - start, "s ]"

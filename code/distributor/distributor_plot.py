@@ -1,26 +1,27 @@
 from __future__ import division
 
-import math
-
-# In-built libraries
-from datetime import datetime
-
 # External libraries
-import matplotlib
+from matplotlib import rc
 import matplotlib.pyplot as plt
 import numpy as np
 
 # Custom libraries
 import str_to_func_lib as stfl
-import distributor_lib as dstlib
+import distributor_io as dstio
 
-matplotlib.rc("text", usetex=True)
+rc("text", usetex=True)
 
-def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
+def plot_hist(dist, func_str, plot_range, title="Randomly Distributed Numbers", fname="distribution"):
     # Plot dist as histogram, with func curve plotted over top
 
+    if not dstio.is_valid_fname(fname):
+        print "[Error] Invalid filename:", fname
+        print "[Error] Please use only lower and upper alphanumerics, full stop, underscore and hyphen."
+        print "[Error] Data not plotted to eps file."
+        return False
+
     num_bins = 100
-    dx = 0.00000001
+    dx = 0.00001 # Precision to which function line is plotted
     bin_width = (plot_range[1] - plot_range[0]) / num_bins
     num = len(dist)
 
@@ -33,16 +34,11 @@ def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
 
     x = np.arange(plot_range[0], plot_range[1], dx)
 
-    func_area = np.trapz(func(x), dx=dx)
     # Use composite trapezoidal rule to integrate function within range
+    func_area = np.trapz(func(x), dx=dx)
 
-    # bin_max = np.max(bins)
-    # func_max = dstlib.find_max(func, plot_range)
-
-    # bins *= func_max / bin_max
-
-    norm = num*bin_width/func_area
     # Normalisation factor so curve and histogram are level
+    norm = num*bin_width/func_area
 
     plt.plot(x, norm*func(x), linewidth=5, label=func_str)
 
@@ -54,11 +50,7 @@ def plot_gen_hist(dist, func_str, title=None, fname=None, plot_range=(0,1)):
 
     plt.legend(loc="upper right", fontsize="x-small", borderpad=1)
 
-    if fname:
-        fname = "plots/"+fname+".eps"
-    else:
-        now = datetime.now()
-        fname = "plots/"+"random_sinusoid_"+str(now.hour)+"-"+str(now.minute)+"-"+str(now.second)+".eps"
+    fname = "plots/" + fname + ".eps"
 
     plt.savefig(fname)
-    print "Saved plot as {}".format(fname)
+    print "Plot saved as {}".format(fname)
