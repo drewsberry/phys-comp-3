@@ -16,7 +16,7 @@ except ImportError as e:
 
 parser = argparse.ArgumentParser(description="Simulating the decay of injected nuclei travelling towards a detector.")
 
-parser.add_argument("-r", "--range", default="((5,5),(5,5))",
+parser.add_argument("-r", "--range", default="((-5,5),(-5,5))",
                     help="range of detector. Enter as python tuple in string form without spaces, e.g. '((-5,5),(-5,5))'")
 
 parser.add_argument("-n", "--num", type=float, default=1e7,
@@ -43,9 +43,6 @@ parser.add_argument("-p", "--plot", action="store_true",
 parser.add_argument("-t", "--timed", action="store_true",
                     help="Print processor timings for each step for purposes of performance analysis.")
 
-parser.add_argument("-v", "--verbose", action="store_true",
-                    help="Increase verbosity; print out additional information such as progress bars (slows down program).")
-
 args = parser.parse_args()
 
 # If you want to plot but can't, print message and prevent from trying to plot
@@ -66,7 +63,6 @@ except Exception as e:
     print "Error converting input range into tuple. Please check the sanity of your input."
     print "Error message:", e
     exit(10)
-
 
 start = time.clock()
 print "Simulating random decay positions..."
@@ -101,7 +97,7 @@ start_total = time.clock()
 print "Smearing detector positions to simulate detector resolution...\n"
 
 start = time.clock()
-x_pos_smeared = gamlib.smear(x_pos, res_x, args.verbose)
+x_pos_smeared = gamlib.smear(x_pos, res_x)
 print "...x positions smeared..."
 end = time.clock()
 if args.timed:
@@ -109,7 +105,7 @@ if args.timed:
 print
 
 start = time.clock()
-y_pos_smeared = gamlib.smear(y_pos, res_y, args.verbose)
+y_pos_smeared = gamlib.smear(y_pos, res_y)
 print "...y positions smeared..."
 end = time.clock()
 if args.timed:

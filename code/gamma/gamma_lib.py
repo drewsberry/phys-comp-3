@@ -58,19 +58,19 @@ def string_to_2dlist(string):
 
     return lst2d
 
-def smear(positions, resolution, verb):
+def smear_value(value, resolution):
+    # Smear individual value to simulate resolution
+
+    value += np.random.normal(loc=value, scale=resolution)
+
+    return value
+
+def smear(positions, resolution):
     # Apply Gaussian smearing to bins with mean 'mean' and standard deviation 'sigma'
 
     smeared_positions = np.copy(positions)
-    num = len(smeared_positions)
 
-    if verb:
-        print "Positions smeared:"
-
-    for i in xrange(num):
-        smeared_positions[i] += np.random.normal(loc=smeared_positions[i], scale=resolution)
-        if verb:
-            display_progress(i, num)
+    smeared_positions = np.apply_along_axis(smear_value, 0, smeared_positions, resolution)
 
     return smeared_positions 
 
@@ -81,16 +81,3 @@ def round_to_res(number, res):
 
     # Always returns float
     return rounded
-
-def display_progress(current, target):
-    # Displays progress bar showing how close current is to target
-
-    percentage = 100*(current+1)/target
-
-    if percentage%1 == 0:
-        sys.stdout.flush()
-        sys.stdout.write("\r\t\t\t\t\t["+"#"*int(percentage)+" "*int(100 - percentage)+"]"+"(%3d%%)"%(percentage))
-        if percentage == 100:
-            print
-
-    return 0
