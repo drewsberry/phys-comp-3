@@ -1,0 +1,55 @@
+\section{Random Numbers in a Distribution}
+\label{sec:random}
+
+\subsection{Pseudo-Random Number Generators (PRNGs)}
+\label{subsec:prngs}
+
+In practice, PRNGs are used instead of real hardware RNGs. Sawilowsky gave the following characteristics of a correct and useful PRNG, for use in a Monte Carlo simulation\cite{Sawilowsky03}:
+\begin{enumerate}
+    \item
+        the PRNG has long period before the random values begin to repeat themselves, and
+    \item
+        the PRNG produces values that pass tests for randomness.
+\end{enumerate}
+
+For the purposes of this exercise, NumPy's \texttt{numpy.random} functions were used, which use the Mersenne Twister (MT) algorithm as developed by Matsumoto and Nishimura in 1998\cite{Matsumoto98}. These are so-called because their period of repetition is a Mersenne prime; specifically NumPy uses the MT19937 version\cite{PythonRandom}, which has period $2^{19937} - 1 \approx 4.3 \times 10^{6001}$\cite{Matsumoto98}. Hence the period is sufficiently large as to be effectively non-periodic and Sawilowsky's first condition is satisfied. MT also passes the standard empirical tests of the randomness of a PRNG, namely the DIEHARD and TestU01 tests\cite{Ecuyer08,Jagannatam09}. The MT algorithm therefore satisfies all of Sawilowsky's requirements for a PRNG.
+
+
+Throughout this exercise, the seed is set by default by accessing the system's \texttt{/dev/urandom} on *nix and \texttt{CryptGenRandom} on Windows NT, thereby ensuring that values are not repeated on each run.
+
+\subsection{Analytic Sinusoidal Distribution}
+\label{subsec:analytic_sin}
+
+Two methods are used to produce the desired random number distributions. The first produces a sinusoidal random number distribution analytically by translating evenly distributed random numbers to sinusoidally distributed ones. This is done as follows:
+
+Let the desired distribution, in this case a sinusoid, be $P'(x')$. The problem then is to convert between an even distribution, $P(x)$, and $P'(x')$. If the assumption is made that $P(x)$ and $P'(x')$ are properly normalised, then the cumulative distribution must be the same, so for generated value $x_{\text{gen}}$ corresponding to required value $x'_{\text{req}}$:
+\begin{equation}
+    \int_{x_0}^{x_{\text{gen}}} P(x) \dd x = \int_{x'_0}^{x'_{\text{req}}} P'(x') \dd x'.
+    \label{eqn:analytic_integral}
+\end{equation}
+Letting $x_0 = 0$, then:
+\begin{equation}
+    \int_0^{x_{\text{gen}}} P(x) \dd x = x_{\text{gen}}.
+\end{equation}
+Defining $Q(x'_{\text{req}}) = \int_{x_0}^{x_{\text{gen}}} P(x) \dd x$, Equation \ref{eqn:analytic_integral} becomes:
+\begin{equation}
+    Q(x'_{\text{req}}) = x_{\text{gen}},
+    \label{eqn:analytic_q}
+\end{equation}, so the solution for $x'_{\text{req}}$ is found by inverting $Q(x'_{\text{req}})$ to obtain:
+\begin{equation}
+    x'_{\text{req}} = Q^{-1}(x_{\text{gen}}).
+\end{equation}
+
+This is applied to a sinusoid, $P'(x') = \sin(x')$ for $0 < x' < \pi$, to obtain:
+\begin{align}
+    Q(x'_{\text{req}}) &= \int_0^{x'_{\text{req}}} \sin(x') \dd x' \notag \\
+                       &= \Big[\cos(x')\Big]_{x' = 0}^{x' = x'_{\text{req}}} \\
+                       &= \cos(x'_{\text{req}}) - 1 \notag
+\end{align}
+\begin{align}
+    \implies x'_{\text{req}} &= Q^{-1}(x_{\text{gen}}) \notag \\
+                             &= \arccos(1 - x_{\text{gen}}),
+\end{align} where $0 < x < 2$.
+
+\subsection{Random Number Distributor}
+\label{subsec:random_number_distributor}

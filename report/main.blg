@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: apsrev.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: bibliography.bib
+You're missing a field name---line 68 of file bibliography.bib
+ :     
+ :     %url = {cryptography.gmu.edu/~jkaps/download.php?docid=1083}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--missing institution in PythonRandom
+You've used 6 entries,
+            3411 wiz_defined-function locations,
+            1203 strings with 11070 characters,
+and the built_in function-call counts, 3227 in all, are:
+= -- 198
+> -- 73
+< -- 16
++ -- 48
+- -- 18
+* -- 422
+:= -- 386
+add.period$ -- 6
+call.type$ -- 6
+change.case$ -- 28
+chr.to.int$ -- 9
+cite$ -- 7
+duplicate$ -- 301
+empty$ -- 288
+format.name$ -- 54
+if$ -- 601
+int.to.chr$ -- 1
+int.to.str$ -- 7
+missing$ -- 48
+newline$ -- 33
+num.names$ -- 18
+pop$ -- 79
+preamble$ -- 1
+purify$ -- 24
+quote$ -- 0
+skip$ -- 112
+stack$ -- 0
+substring$ -- 82
+swap$ -- 224
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 32
+warning$ -- 1
+while$ -- 15
+width$ -- 0
+write$ -- 80
+(There was 1 error message)

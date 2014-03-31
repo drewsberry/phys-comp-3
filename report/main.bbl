@@ -1,0 +1,55 @@
+\begin{thebibliography}{6}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname bibnamefont\endcsname\relax
+  \def\bibnamefont#1{#1}\fi
+\expandafter\ifx\csname bibfnamefont\endcsname\relax
+  \def\bibfnamefont#1{#1}\fi
+\expandafter\ifx\csname citenamefont\endcsname\relax
+  \def\citenamefont#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{\citenamefont{Mathews and Fink}(2004)}]{Mathews04}
+\bibinfo{author}{\bibfnamefont{J.~H.} \bibnamefont{Mathews}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{K.~K.} \bibnamefont{Fink}},
+  \emph{\bibinfo{title}{{Numerical Methods Using Matlab (4th Edition)}}}
+  (\bibinfo{publisher}{Pearson}, \bibinfo{year}{2004}), \bibinfo{edition}{4th}
+  ed., ISBN \bibinfo{isbn}{0130652482},
+  \urlprefix\url{http://mathfaculty.fullerton.edu/mathews//n2003/montecarlopimod.html}.
+
+\bibitem[{\citenamefont{Sawilowsky}(2003)}]{Sawilowsky03}
+\bibinfo{author}{\bibfnamefont{S.~S.} \bibnamefont{Sawilowsky}},
+  \bibinfo{journal}{Journal of Modern Applied Statistical Methods}
+  \textbf{\bibinfo{volume}{2}}, \bibinfo{pages}{218} (\bibinfo{year}{2003}),
+  \urlprefix\url{http://digitalcommons.wayne.edu/coe_tbf/21}.
+
+\bibitem[{\citenamefont{Matsumoto and Nishimura}(1998)}]{Matsumoto98}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Matsumoto}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{T.}~\bibnamefont{Nishimura}},
+  \bibinfo{journal}{ACM Trans. Model. Comput. Simul.}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{3} (\bibinfo{year}{1998}), ISSN
+  \bibinfo{issn}{1049-3301},
+  \urlprefix\url{http://doi.acm.org/10.1145/272991.272995}.
+
+\bibitem[{\citenamefont{Foundation}(2014)}]{PythonRandom}
+\bibinfo{author}{\bibfnamefont{P.~S.} \bibnamefont{Foundation}},
+  \bibinfo{type}{Tech. Rep.} (\bibinfo{year}{2014}),
+  \urlprefix\url{https://docs.python.org/2/library/random.html}.
+
+\bibitem[{\citenamefont{Ecuyer and Owen}(2010)}]{Ecuyer08}
+\bibinfo{author}{\bibfnamefont{P.}~\bibnamefont{Ecuyer}} \bibnamefont{and}
+  \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Owen}},
+  \emph{\bibinfo{title}{Monte Carlo and Quasi-Monte Carlo Methods 2008}},
+  Mathematics and Statistics (\bibinfo{publisher}{Springer},
+  \bibinfo{year}{2010}), ISBN \bibinfo{isbn}{9783642041075},
+  \urlprefix\url{http://books.google.co.uk/books?id=5Y9cnmtLGQYC}.
+
+\bibitem[{\citenamefont{Jagannatam}(2009)}]{Jagannatam09}
+\bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Jagannatam}},
+  \emph{\bibinfo{title}{{Mersenne Twister - A Pseudo Random Number Generator
+  and its Variants}}} (\bibinfo{year}{2009}).
+
+\end{thebibliography}
