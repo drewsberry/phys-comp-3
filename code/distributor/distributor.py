@@ -31,10 +31,6 @@ parser.add_argument("-r", "--range", required=True,
                     help="the range to produce random numbers from and to. Enter as string"\
                          " tuple, e.g. '(0,pi)'")
 
-parser.add_argument("-v", "--verbose", action="store_true",
-                    help="increase verbosity; print additional information including progress bars"\
-                         " (slows down program).")
-
 parser.add_argument("-p", "--plot", action="store_true",
                     help="plots resulting random distributions to file.")
 
@@ -84,7 +80,9 @@ except Exception as e:
 
 if not args.fixnum:
     start = time.clock()
-    random_dist = dstlib.reject_accept(num, args.verbose, args.func, dist_range)
+    print "Producing random user-distributed numbers using reject-accept method..."
+    random_dist = dstlib.reject_accept(num, args.func, dist_range)
+    print "...done"
     end = time.clock()
     if args.timed:
         print "[ Processor time taken:", end - start, "s ]"
@@ -94,7 +92,10 @@ if not args.fixnum:
 
 if args.fixnum:
     start = time.clock()
-    random_dist = dstlib.reject_accept_fixed(num, args.verbose, args.func, dist_range)
+    print "Producing fixed number {} of random user-distributed numbers "\
+          "via reject-accept method...".format(num)
+    random_dist = dstlib.reject_accept_fixed(num, args.func, dist_range)
+    print "...done"
     end = time.clock()
     if args.timed:
         print "[ Processor time taken:", end - start, "s ]"
@@ -102,7 +103,8 @@ if args.fixnum:
 
 if args.plot:
      dstplt.plot_hist(random_dist, args.func, dist_range,
-                      title=args.func+" Distribution, Reject-Accept Method",
+                      # title=args.func+" Distribution, Reject-Accept Method",
+                      title="Reject-Accepted Generated Random Sin Distribution ($10^8$ numbers)",
                       fname="reject_accept")
 
 # Write output to file

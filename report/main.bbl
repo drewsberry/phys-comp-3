@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{9}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname bibnamefont\endcsname\relax
   \def\bibnamefont#1{#1}\fi
@@ -50,6 +50,21 @@
 \bibitem[{\citenamefont{Jagannatam}(2009)}]{Jagannatam09}
 \bibinfo{author}{\bibfnamefont{A.}~\bibnamefont{Jagannatam}},
   \emph{\bibinfo{title}{{Mersenne Twister - A Pseudo Random Number Generator
-  and its Variants}}} (\bibinfo{year}{2009}).
+  and its Variants}}} (\bibinfo{year}{2009}),
+  \urlprefix\url{cryptography.gmu.edu/~jkaps/download.php?docid=1083}.
+
+\bibitem[{\citenamefont{Community}(2014)}]{WhatIsNumPy}
+\bibinfo{author}{\bibfnamefont{T.~S.} \bibnamefont{Community}},
+  \bibinfo{type}{Tech. Rep.} (\bibinfo{year}{2014}),
+  \urlprefix\url{http://docs.scipy.org/doc/numpy/user/whatisnumpy.html}.
+
+\bibitem[{\citenamefont{Weisstein}()}]{WolframPointPicking}
+\bibinfo{author}{\bibfnamefont{E.~W.} \bibnamefont{Weisstein}},
+  \emph{\bibinfo{title}{{Sphere Point Picking}}}, \bibinfo{note}{from Mathworld
+  -- A Wolfram Web Resource},
+  \urlprefix\url{http://mathworld.wolfram.com/SpherePointPicking.html}.
+
+\bibitem[{\citenamefont{Moll}(1999)}]{Moll99}
+\bibinfo{author}{\bibfnamefont{M.}~\bibnamefont{Moll}} (\bibinfo{year}{1999}).
 
 \end{thebibliography}

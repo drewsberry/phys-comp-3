@@ -10,19 +10,6 @@ import numpy as np
 # Custom libraries
 import str_to_func_lib as stfl
 
-def display_progress(current, target):
-    # Displays progress bar showing how close current is to target
-
-    percentage = 100*(current+1)/target
-
-    if percentage%1 == 0:
-        sys.stdout.flush()
-        sys.stdout.write("\r\t\t\t\t\t["+"#"*int(percentage)+" "*int(100 - percentage)+"]"+"(%3d%%)"%(percentage))
-        if percentage == 100:
-            print
-
-    return 0
-
 def string_to_list(string):
     # Turn string into list so range can be parsed by arguments neatly and intuitively
 
@@ -34,7 +21,7 @@ def string_to_list(string):
 
     return lst
 
-def reject_accept(num, verb, func_str, dist_range):
+def reject_accept(num, func_str, dist_range):
     # Use reject-accept method to produce random numbers distributed as 
     # general user-defined function in user-defined range
 
@@ -48,30 +35,17 @@ def reject_accept(num, verb, func_str, dist_range):
     # Second random variables, y, evenly generated in [0, y_max]
     second = np.random.uniform(0, func_max, num)
 
-    dist = []
-
     # If second random variable, y, is less than P'(x'), accept it.
     criterion = second < func(first)
 
-    print "Producing random user-distributed numbers using reject-accept method..."
+    # dist is all values of first with corresponding True criterion
+    dist = first[criterion]
 
-    if verb:
-        print "\nRandom numbers produced:",
-
-    for i in range(num):
-        if criterion[i]:
-            dist.append(first[i])
-        if verb:
-            display_progress(i+1,num)
-
-    print "...done"
-
-    if verb:
-        print "{} random numbers produced.".format(len(dist))
+    print "{} random numbers produced.".format(len(dist))
 
     return dist 
 
-def reject_accept_fixed(num, verb, func_str, dist_range):
+def reject_accept_fixed(num, func_str, dist_range):
     # Use reject-accept method to produce fixed number of random numbers
     # distributed as per user-defined function
 
@@ -82,32 +56,25 @@ def reject_accept_fixed(num, verb, func_str, dist_range):
     # The 9* is just because if I produce 9 times the number I need then
     # chances are increased from ~40% for 1*num to about ~99% that I will
     # produce sufficient user-distributed numbers.
-    first = np.random.uniform(dist_range[0], dist_range[1], 9*num)
-    second = np.random.uniform(0, func_max, 9*num)
-    dist = []
 
+    # First random variables, x', evenly generated in range
+    first = np.random.uniform(dist_range[0], dist_range[1], 9*num)
+
+    # Second random variables, y, evenly generated in [0, y_max]
+    second = np.random.uniform(0, func_max, 9*num)
+
+    # If second random variable, y, is less than P'(x'), accept it.
     criterion = second < func(first)
 
-    print "Producing fixed number {} of random user-distributed numbers "\
-          "via reject-accept method...".format(num)
-
-    if verb:
-        print
-        print "Random numbers produced: ",
-
-    for i in range(len(criterion)):
-        if criterion[i]:
-            dist.append(first[i])
-            if len(dist) >= num:
-                print "...done"
-
-                return dist 
-        if verb:
-            display_progress(len(dist),num)
-
-    print "[Error] Error generating random distribution using fixed reject-accept method:"
-    print "[Error] Insufficient random numbers produced. Please try again."
-    return False
+    try:
+        # dist is all values of first with corresponding True criterion,
+        # choosing only the first 'num' of them
+        dist = first[criterion][0:num]
+        return dist
+    except IndexError as e:
+        print "[Error] Error generating random distribution using fixed reject-accept method:"
+        print "[Error] Insufficient random numbers produced. Please try again."
+        return False
 
 def find_max(function, fc_range):
     # Find maximum value of function in dist_range

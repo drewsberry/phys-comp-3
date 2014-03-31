@@ -43,13 +43,55 @@ Defining $Q(x'_{\text{req}}) = \int_{x_0}^{x_{\text{gen}}} P(x) \dd x$, Equation
 This is applied to a sinusoid, $P'(x') = \sin(x')$ for $0 < x' < \pi$, to obtain:
 \begin{align}
     Q(x'_{\text{req}}) &= \int_0^{x'_{\text{req}}} \sin(x') \dd x' \notag \\
-                       &= \Big[\cos(x')\Big]_{x' = 0}^{x' = x'_{\text{req}}} \\
-                       &= \cos(x'_{\text{req}}) - 1 \notag
+                       &= \Big[\cos(x')\Big]_{x' = 0}^{x' = x'_{\text{req}}} \label{eqn:analytic_sin} \\
+                       &= \cos(x'_{\text{req}}) - 1 \notag 
 \end{align}
 \begin{align}
     \implies x'_{\text{req}} &= Q^{-1}(x_{\text{gen}}) \notag \\
-                             &= \arccos(1 - x_{\text{gen}}),
-\end{align} where $0 < x < 2$.
+                             &= \arccos(1 - x_{\text{gen}}), \label{eqn:analytic_sin_inverted}
+\end{align} 
 
-\subsection{Random Number Distributor}
-\label{subsec:random_number_distributor}
+where $0 < x < 2$. Practically this was implemented using \texttt{numpy.arccos} function and \texttt{numpy.random.uniform}. Note that as throughout NumPy's routines are found to be many times faster than the alternative in-built Python loops. Here \texttt{numpy.arccos} applied to the \texttt{numpy.ndarray} scales linearly with the number of random values generated. Generating the random numbers takes \SI{0.04}{\second} of processor time for $10^6$ numbers, \SI{0.38}{\second} for $10^7$ numbers and \SI{3.75}{\second} for $10^8$ values (measured to nearest two decimal places). Equally, converting these evenly distributed numbers to sinusoidally distributed ones using the analytic formula given by Equation \ref{eqn:analytic_sin} using \texttt{numpy.arccos} took \SI{0.09}{\second}, \SI{0.92}{\second} and \SI{9.04}{\second} of processor time for $10^5$, $10^6$ and $10^7$ random numbers respectively.
+
+This is an astounding factor of 25 times faster than the alternative native Python implementation, which achieves the same function with simple \texttt{for} loops and \texttt{math.acos}. This drastic difference in performance is as one would expect computationally for several reasons. Firstly, looping in Python natively in very inefficient and time consuming when dealing with large arrays of the order of one million values or so (as we are dealing with here). This is essentially because Python code is dynamic and interpreted, whereas NumPy's functions are heavily optimised \texttt{C} code, which is static and compiled. Secondly, whilst Python lists such as those containing the random numbers are dynamics arrays of pointers to objects (even when they're all the same type), NumPy arrays are densely packed homogeneous arrays. This means they have a fixed size and that each element takes up the same size in memory. This allows for heavy optimisations to operations applied to the arrays\cite{WhatIsNumPy}.
+
+The produced random sinusoid is shown for different amounts of random numbers in Figure \ref{fig:analytic_sin}. Note that for the relatively low number $10^4$ of random numbers, there is significant deviation from the perfect sin curve overlaid in blue. However, when $10^8$ random numbers are produced, all random variations are ironed out and the histogram perfectly matches the overlaid sin curve. The sinusoid curve is normalised to the histogram by multiplying by the bin width and the number of random numbers that are binned. In general one must also divide by the area underneath the curve, but the area underneath $\sin(x)$ between 0 and 1 is 1, so this has no effect.
+
+\begin{figure}
+    \centering
+    \subfloat[$10^4$ Numbers]{
+        \includegraphics[width=\linewidth]{graphs/random/analytic_sin_1e4}
+        \label{subfig:analytic_sin_1e4}
+    } \\
+    \subfloat[$10^8$ Numbers]{
+        \includegraphics[width=\linewidth]{graphs/random/analytic_sin_1e8}
+        \label{subfig:analytic_sin_1e8}
+    }
+    \caption{The sinusoidal random number distribution for ten thousand and one hundred millions random numbers, produced using the analytic method.}
+    \label{fig:analytic_sin}
+\end{figure}
+
+\subsection{Reject-Accept Method}
+\label{subsec:reject-accept_method}
+
+Although the analytic solution is fast, the $Q(x'_{\text{req}})$ cannot generally be analytically inverted for any function. It has to be calculated by hand. Hence another method is needed to be able to produce general distributions of random numbers. This is where the ``reject-accept'' method is useful. This method works by, as before, generating a random evenly distributed $x$ in the required range. Next, another evenly distributed random number, $y$, is generated, between 0 and $y_{\text{max}} = P'(x'_{\text{max}})$. If the generated $y < P'(x')$, then the value $x$ is accepted as $x'$, else if $y > P'(x')$ then the value $x$ is rejected. Although $y_{\text{max}}$ can be any value $> P'(x'_{\text{max}})$, the higher $y'_{\text{max}}$ is, the fewer $x$ numbers are accepted and the less efficient the random distributor is.
+
+Another way of thinking about this reject-accept method is that picking the two values $x$ and $y$ is picking a point in the rectangle of $x$ length $\pi$ and $y$ length 1. All the numbers that satisfy the aforementioned condition that $y < P'(x')$ are the numbers that lie within the area under the sin curve. This means that the average number ratio of the number of produced $x'$ values to the number of generated $x$ values should be equal to $\frac{2}{\pi} \approx 64\%$, a number confirmed empirically in this program. Indeed this same method could be used to calculate the value of $\pi$ by Monte Carlo.
+
+This reject-accept technique is generalised to accept any valid real function that returns a single value. The plotted results when \texttt{python distributor.py `sin(x)' -r `(0,pi)' -p} is run is shown in Figure \ref{fig:reject_accept_sin}. Note that because some (roughly 40\%) are rejected, the reject-accept method generates fewer output random custom-distributed numbers, and is hence is less efficient. In addition, the production of these numbers takes slightly (although not orders of magnitude) longer than the analytic solution for the sinusoid: \SI{0.17}{\second}, \SI{1.68}{\second} and \SI{16.82}{\second} for $10^6$, $10^7$ and $10^8$ initial random numbers, respectively. This is almost a factor of 2 more computationally expensive than the analytic counterpart. This is simply due to the incredibly simple nature of the analytic solution that it happens to be $\arccos(1-x)$ and thus can be executed very fast using NumPy's functions. The reject-accept method must not only generate some number of evenly distributed $x$, but also the same number of $y$, and hence then have to apply $\sin(x)$ to $x$ and compare it to $y$. This is not extremely computationally intensive and when compared to other more complicated analytic solutions it would be significantly faster (imagine comparing this reject-accept method to the analytic inversion arising from $Q(x') = x'e^{x'}$ or another similarly complicated PDF). In addition, not all functions are analytically invertible or integrable, meaning the reject-accept method is the only viable method of random number distribution.
+
+\begin{figure}
+    \centering
+    \subfloat[$10^4$ Numbers]{
+        \includegraphics[width=\linewidth]{graphs/random/reject_accept_sin_1e4}
+        \label{subfig:reject_accept_sin_1e4}
+    } \\
+    \subfloat[$10^8$ Numbers]{
+        \includegraphics[width=\linewidth]{graphs/random/reject_accept_sin_1e8}
+        \label{subfig:reject_accept_sin_1e8}
+    }
+    \caption{The sinusoidal random number distribution for ten thousand and one hundred millions random numbers, produced using reject-accept method.}
+    \label{fig:reject_accept_sin}
+\end{figure}
+
+A reject-accept algorithm that produces a fixed number of output random numbers is also implemented. Instead of checking to see whether the number cap has been reached after each random number generation, 9 times the number needed were generated, meaning on average \~64\% of these (for the sin function) pass the test and can be used for the final distributed random numbers. This should suffice in over 99\% of all runs, whilst not adding significant runtime to the program execution. Different functions vary differently as the efficiency of random user-distributed numbers produced goes is equal to the ratio of the areas under the function and in the rectangular grid of the plot in the specified range, however this proves empirically sufficient for almost all functions.
