@@ -9,3 +9,5 @@ The contents of the code is split in two:
 	* an analytic inversion method, and
 	* a _reject-accept_ method (conceptually similar to standard Monte Carlo techniques).
 * Simulating the distribution of gamma rays, produced by the decay of a beam of unstable nuclei, detected in a nuclear physics experiment.
+
+This branch contains the `LaTeX` code for the final report for the piece of coursework.
