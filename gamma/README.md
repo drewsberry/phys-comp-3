@@ -59,3 +59,9 @@ The script `sphere_mayavi.py` requires `mayavi` to be installed. The easiest way
 ```bash
 $ sudo apt-get install mayavi2
 ```
+
+The plotting option, `-p` or `--plot`, in `gamma.py` require `matplotlib`, which can be installed via:
+
+```bash
+$ sudo pip install matplotlib
+```
