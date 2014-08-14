@@ -27,11 +27,11 @@ Subdirectories are the default locations to save data and graphs, respectively.
 
 | Option | Description |
 | ------ | ----------- |
-| `-p/--plot` | Plot to file |
-| `-o/--output` | Print the produced random data to specified file. |
-| `-n/--number` | The number of random numbers to produce. |
-| `-t/--timed` | Print processor timing information. |
-| `-x/--excel` | Print the produced random data to specified Excel spreadsheet. Note a limitation in Excel spreadsheets prior to 2007 limits the number of rows to 65,536. |
+| `-p` or `--plot` | Plot to file |
+| `-o` or `--output` | Print the produced random data to specified file. |
+| `-n` or `--number` | The number of random numbers to produce. |
+| `-t` or `--timed` | Print processor timing information. |
+| `-x` or `--excel` | Print the produced random data to specified Excel spreadsheet. Note a limitation in Excel spreadsheets prior to 2007 limits the number of rows to 65,536. |
 
 Note that no arguments need be specified. Giving no arguments does not plot or print output, but works fine.
 
