@@ -1,27 +1,61 @@
 # gamma
 
+## Overview
+
 This directory contains the script for the Monte Carlo detector simulation, as well as a small script to run a pretty and fun interactive visualisation of how clumping forms when points are not properly picked on a sphere.
 
-The actual file to run is 'gamma.py', and the Mayavi visualisation is 'sphere_mayavi.py'.
+## Running
 
-The other files are as follows:
-    - gamma_lib.py: library containing functions used by gamma.py for Monte Carlo simulation.
-    - gamma_plot.py: library containing functions for plotting the various output results form the simulation.
-    - sphere_mayavi_lib.py: library containing functions sued by sphere_mayavi.py for the running of the sphere visualisations. Requires mayavi2 to run (runs 'from mayavi import mlab').
+To run the main gamma decay simulation, run:
 
-Subdirectories are the default locations to save data and graphs.
+```bash
+$ python gamma.py --options
+```
 
-gamma.py options:
-    - -r/--range: Size of detector in meters. Enter as tuple inside string, e.g. "((-2.5,2.5),(-4.5,4.5))" would plot for a detector from -2.5 to 2.5 in X direction and from -4.5 to 4.5 in Y direction. Note that there should be no spaces in the string.
-    - -n/--num: Number of decays to simulate. Default is 10 million.
-    - -s/--speed: Speed of injected nuclei in meters per second. Default is 2000.
-    - -l/--lifetime: Average lifetime of nucleus in microseconds. Default is 520.
-    - -xr/--xres: x-resolution of detector in centimetres. Used for both binning and smearing. Default is 10.
-    - -yr/--yres: y-resolution of detector in centimetres. Used for both binning and smearing. Default is 30.
-    - -d/--distance: Distance from point of injection to detector.
-    - -p/--plot: Plot resulting simulated data to eps files.
-    - -t/--timed: Print processor clock timing information for performance analysis/debugging.
+To run the Mayavi sphere visualisation (requires `mayavi`), run:
 
-Note that gamma.py runs fine without any of the optional arguments, as it's set by default to all the values specified in the script, with a range of -5 to 5 in both X and Y.
+```bash
+$ python sphere_mayavi.py
+```
 
-sphere_mayavi.py has no options because it's just a straight script.
+## Files
+
+The files are as follows:
+
+| File | Description |
+| ---- | ----------- |
+| `gamma.py` | The script to run that simulates the gamma decay. |
+| `gamma_lib.py` | The module containing all the functions needed by `gamma.py` to simulate the gamma decay. |
+| `gamma_plot.py` | The module containing all the functions for plotting the resulting simulation data to graphs (requires `matplotlib`). |
+| `sphere_mayavi.py` | The script for running the Mayavi visualisation of the sphere point picking (requires `mayavi`). |
+| `sphere_mayavi_lib.py` | The module containing the functions needed by `sphere_mayavi.py` for running the sphere visualisations (requires `mayavi`). |
+
+Subdirectories are the default locations to save data and graphs, respectively.
+
+## Options
+
+The options for `gamma.py` are as follows:
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| `-r` or `--range` | The size of the detector in meters. Enter as tuple containing two tuples inside string. For instance, `"((-2.5,2.5),(-4.5,4.5))"` would be a detector spanning from -2.5m to 2.5m in the X direction and -4.5m to 4.5m in the Y direction. Note that there should be no spaces in the string. | `"((-5,5),(-5,5))"` |
+| `-n` or `--num` | The number of decays to simulate. | 10 million |
+| `-s` or `--speed` | The speed that the injected nuclei are travelling at in meters per second. | 2000 m/s |
+| `-l` or `--lifetime` | The average liftetime of the unstable nuclei in microseconds. | 520 &mu;s |
+| `-xr` or `--xres` | The x-resolution of the detector in centimetres. Used for both binning and smearing the data. | 10 cm |
+| `-yr` or `--yres` | The y-resolution of the detector in centimetres. Used for both binning and smearing the data. | 30 cm |
+| `-d` or `--distance` | Distance from the point of injection of the unstable nuclei and the detector, in meters. | 2 m |
+| `-p` or `--plot` | Plot the resulting simulated data to eps files (requires `matplotlib`). | N/A |
+| `-t` or `--timed` | Print processor clock timing information. | N/A |
+
+Note that gamma.py runs fine without any of the optional arguments, as it's set by default to all the values specified in the script.
+
+The `gamma_sphere.py` script has no options.
+
+## Requirements
+
+The script `sphere_mayavi.py` requires `mayavi` to be installed. The easiest way to install `mayavi` on Windows and MacOS is simply to install a fully Python distribution such as Enthought Canopy. On Debian or Ubuntu, you can simply run:
+
+```bash
+$ sudo apt-get install mayavi2
+```
