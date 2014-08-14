@@ -1,23 +1,52 @@
 # distributor
 
+## Overview
+
 This directory contains the script and libraries for the general reject-accept distributor.
 
-The actual file to run is 'distributor.py'
+## Running
 
-The other files are as follows:
-    - distributor_lib.py: library containing most of the function calls used as part of the program.
-    - distributor_plot.py: library containing the plotting functions (optional; works without matplotlib but with plotting disabled).
-    - distributor_io.py: library containing the input/output functions used by distributor.py, namely write to output file and write to Excel spreadsheet if you have xlwt installed.
-    - str_to_func_lib.py: library containing function that takes string from argument as input and returns a lambda function that evaluates the equation specified by the user. Note the 'from {numpy, scipy.special} import *' statements. These are so the user need not input "np.sin(x)", which they shouldn't have to.
+Running `distributor.py` is as simple as:
 
-Subdirectories are the default locations to save data and graphs.
+```bash
+$ python distributor.py --options
+```
 
-distributor.py options:
-    - "func": Main positional (compulsory) argument; a string that when evaluated is a valid Python expression, e.g. "sin(x)", "gamma(x)" etc.
-    - -r/--range: The range to produce random numbers from and to. Required argument. Enter as tuple inside a string, e.g. "(-1,2)", "(-e,pi)" etc.
-    - -p/--plot: Plot to file.
-    - -o/--output: Output random data to file.
-    - -x/--excel: Output random data to Excel spreadsheet if xlwt is installed.
-    - -n/--num: The number of initial random numbers to generate. Not guaranteed to be same as produced number due to *reject*-accept method, unless -f/--fixnum is chosen, in which I go to extra effort to make sure you do produce num numbers.
-    - -f/--fixnum: Produce a fixed number of random numbers as output.
-    - -t/--timed: Time each operation for debugging/performance comparison purposes.
+## Files
+
+| File | Description |
+| ---- | ----------- |
+| `distributor.py` | The Python script to be run, that produces the distributed random numbers. |
+| `distributor_lib.py` | The module containing the functions necessary for the operation of `distributor.py`. |
+| `distributor_plot.py` | The module containing all the plotting functions used to histogram the produced random numbers (requires `matplotlib`). |
+| `distributor_io.py` | The module containing all the input/output functions used by `distributor.py`, namely writing the distributed random numbers to plaintext and to Excel spreadsheet (if `xlwt` is installed). |
+| `str_to_func_lib.py` | The module containing the function that takes a string as input and turns it into an anonymous (or lambda) function that evaluates the mathematical expression given by the user as an argument. Thi has been separated as a module so that the nasty but unnecessary `from numpy import *` and `from scipy.special import *` only affect the one function, `str_to_func()`. |
+
+Subdirectories are the default locations to save data and graphs, respectively.
+
+## Options
+
+| Options | Required | Description |
+| ------- | -------- | ----------- |
+| `func` | Yes | The main compulsory positional argument; a string that when evaluated is a valid Python mathematical expression with "x" as the operand, e.g. "sin(x)", "gamma(x)" etc. |
+| `-r` or `--range` | Yes | The range to produce the random numbers from and to. Enter as valid Python tuple within string, e.g. "(1,2)", "(-e, pi)". Accepts basic mathematical constants, e.g. e, pi.
+| `-p` or `--plot` | No | Plot histograms of the produced distributed random numbers to specified file (requires `matplotlib`) |
+| `-o` or `--output` | No | Output the produced distributed random numbers to specified file. |
+| `-x` or `--excel` | No | Output the produced distributed random numbers to specified file as Excel spreadsheet. |
+| `-n` or `--num` | No | The number of initial random numbers to generate. As this uses the reject-accept method, some of these are rejected and the actual nunber of random numbers is less than this. If you want to have a fixed number of random numbers produced, use `-f` or `--fixnum`. |
+| `-f` or `--fixnum` | No | Use this flag if you want to produce a fixed number of random numbers, as given by the `-n` or `--num` argument.
+| `-t` or `--timed` | No | Print processor timing information. |
+
+## Requirements
+
+The plotting option, `-p` or `--plot`, requires `matplotlib`, which can be installed via `pip` with:
+
+```bash
+$ sudo pip install matplotlib
+```
+
+The print to Excel spreadsheet option, `-x` or `--excel`, requires `xlwt`, which can be installed via `pip` with:
+
+```bash
+$ sudo pip install xlwt
+```
