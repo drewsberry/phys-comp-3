@@ -19,4 +19,4 @@ This branch contains the actual Python code used to produce the program.
 | analytic\_sin | This folder contains the code to analytically produce random numbers distributed sinusoidally, by inverting the sine. For more information, see [analytic\_sin/README.md](analytic_sin/README.md). |
 | distributor | This folder contains a general program for producing random distributions that follow a given mathematical function, which is input by the user. This uses the reject-accept method. For more information, see [distributor/README.md](distributor/README.md). |
 | gamma | This folder contains the code for a small Monte Carlo gamma decay simulator, including some neat visualisations. For more information, see [gamma/README.md](gamma/README.md) |
-| reject-accept\_sin | This folder contains the code to produce random sinusoidally distributed numbers using the reject-accept method. For more information, see [reject-accept\_sin](reject-accept_sin/README.md) |
+| reject-accept\_sin | This folder contains the code to produce random sinusoidally distributed numbers using the reject-accept method. For more information, see [reject-accept\_sin](reject-accept_sin) |
